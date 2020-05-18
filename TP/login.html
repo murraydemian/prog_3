@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script src="./javascript/validaciones.js"></script>
+        <title>HTML 5 – Formulario Login</title>
+    </head>
+    <body>
+        <h2>Login</h2>
+        <form action="http://localhost/prog_3/TP/src/verificarUsuario.php"method="POST"id="frmLogin">            
+            <table align="center">
+                <tbody>                
+                    <tr>
+                        <td colspan="2">                
+                            <h4>Ingreso de credenciales</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DNI:</td>
+                        <td>
+                            <input type="number"min="1000000"max="55000000"id="txtDni"name="txtDni">
+                            <span id="tgDni"name="tgDni"style="display:none;">*</span>
+                        </td>
+                    </tr><br>
+                    <tr>
+                        <td>Apellido:</td>
+                        <td>
+                            <input type="text"id="txtApellido"name="txtApellido">
+                            <span id="tgApellido"name="tgApellido"style="display:none;">*</span>
+                        </td>
+                    </tr><br>
+                    <tr>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"colspan="2">
+                            <button type="reset"id="btnLimpiar"name="btnLimpiar">Limpiar</button>
+                        </td>
+                    </tr><br>
+                    <tr>
+                        <td align="right"colspan="2">
+                            <button type="button"id="btnEnviar"onclick="AdministrarValidacionesLogin()">Enviar</button>
+                        </td>
+                    </tr><br>
+                </tbody>
+            </table>
+        </form>
+    </body>
+</html>
+            
