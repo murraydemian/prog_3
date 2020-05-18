@@ -74,7 +74,7 @@
             rename('../' . $old, '../' . $new);
         }
         $emp->SetPathFoto($new);
-        //eliminar compara por legajo, el cual no pudo ser modificado
+        //eliminar compara por legajo, el cual no pudo haber sido modificado
         $fab->EliminarEmpleado($emp);
         $fab->AgregarEmpleado($emp);   
         $fab->GuardarEnArchivo('../archivos/empleados.txt');    

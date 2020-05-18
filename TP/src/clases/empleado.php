@@ -3,7 +3,7 @@
 
     class Empleado extends Persona{
 
-
+        protected $_id;
         protected $_legajo;
         protected $_sueldo;
         protected $_turno;
@@ -28,9 +28,15 @@
         public function GetPathFoto(){
             return $this->_path;
         }
+        public function GetId(){
+            return $this->_id;
+        }
         
         public function SetPathFoto($foto){
             $this->_path = $foto;
+        }
+        public function SetId($id){
+            $this->_id = $id;
         }
         
 

@@ -2,7 +2,7 @@
     //namespace TP_Parte_1;
 
 
-    class Fabrica implements IArchivo{
+    class Fabrica{
 
         private $_cantidadMaxima;
         private $_empleados;
