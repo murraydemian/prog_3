@@ -44,7 +44,7 @@
     }
     function GenerarFabrica($cap){
         $fab = new Fabrica("foo" , $cap);
-        $fab->TraerDeArchivo("http://localhost/prog_3/TP/archivos/empleados.txt");
+        $fab->TraerDeArchivo("../archivos/empleados.txt");
         return $fab;
     }
     function AgregarEmpleado(){

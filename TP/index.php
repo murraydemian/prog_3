@@ -3,7 +3,7 @@
     include_once './src/validarSesion.php';
     validarSesion();
     if(isset($_POST['hidDNI'])){
-        $emp = (Fabrica::TraerDesdeArchivo("http://localhost/prog_3/TP/archivos/empleados.txt"))->TraerPorDNI($_POST['hidDNI']);
+        $emp = (Fabrica::TraerDesdeArchivo("./archivos/empleados.txt"))->TraerPorDNI($_POST['hidDNI']);
         $title = "Modificar Empleado";
         $inDNI = ' value="'. $emp->GetDni() .'" readonly';
         $inLegajo = ' value="' . $emp->GetLegajo() . '" readonly';
@@ -62,7 +62,7 @@
     </head>
     <body>           
         </form>
-        <form action="http://localhost/prog_3/TP/src/administracion.php"method="POST"id="frmEmpleado"enctype="multipart/form-data">
+        <form action="./src/administracion.php"method="POST"id="frmEmpleado"enctype="multipart/form-data">
             <input type="hidden" name="hdnModificar" id="hdnModificar" <?PHP echo $hdnModificar?>>
             <h2><?php echo $title ?></h2>
             <a href="./src/cerrarSesion.php"align="right">[Cerrar sesion]</a>

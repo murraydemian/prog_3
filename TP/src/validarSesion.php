@@ -5,7 +5,7 @@
             session_start();
         }
         if(!isset($_SESSION["DNIEmpleado"])){
-            header("location: http://localhost/prog_3/TP/login.html");
+            header("location: ./login.html");
             exit;
         }       
     }

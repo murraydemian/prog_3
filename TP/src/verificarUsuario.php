@@ -21,7 +21,7 @@
                     exit();
                 }                
             }
-            echo('<h4>No existe empleados con datos indicados.</h4><br><a href="http://localhost/prog_3/TP/login.html">Volver al login</a>');            
+            echo('<h4>No existe empleados con datos indicados.</h4><br><a href="./login.html">Volver al login</a>');            
         }
     }
     VerificarUsuario();
