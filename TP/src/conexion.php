@@ -1,5 +1,5 @@
 <?PHP
-    include_once __DIR__ . "exception/exceptions.php";
+    include_once "./exception/exceptions.php";
 
     /**Retorna la cadena de coneccion a la base de datos */
     function ConectionString(){
@@ -7,10 +7,10 @@
     }
     /**Verifica si el empleado ya esta ingresado, si los datos no estan duplicados, lo agrega a la DB */
     function DB_Agregar($emp, $tabla = "empleados", $verificar = true){
-        $pdo = new PDO(ConectionString());        
-        if(VerificarExistencia($pdo, $emp, 'empleados') && $verificar){
+        if(VerificarExistencia($emp->GetDni(), 'empleados') && $verificar){
             throw new EmpleadoRepetidoException();
         }else{
+            $pdo = new PDO(ConectionString());        
             if($verificar){ //el booleano verificar indica si se verificara por datos repetidos
                 $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
                 (dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
@@ -47,22 +47,27 @@
     }
     /**Trae un objeto empleado de una tabla donde coincida el DNI */
     function DB_Traer($dni, $table = 'empleados'){
-        $pdo = new PDO(ConectionString());
-        $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
-        $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
-        $sentencia->execute();
-        unset($pdo);
-        $dataRow = $sentencia->fetchObject();
-        $emp = new Empleado($dataRow->nombre, 
-                            $dataRow->apellido, 
-                            intval($dataRow->dni), 
-                            $dataRow->sexo, 
-                            intval($dataRow->legajo), 
-                            floatval($dataRow->sueldo),
-                            $dataRow->turno);
-                            $emp->SetPathFoto($dataRow->pathFoto);
-                            $emp->SetId($dataRow->id);
-        return $emp;
+        try{
+            $pdo = new PDO(ConectionString());
+            $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
+            $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
+            $sentencia->execute();            
+            $dataRow = $sentencia->fetchObject();
+            $emp = new Empleado($dataRow->nombre, 
+                                $dataRow->apellido, 
+                                intval($dataRow->dni), 
+                                $dataRow->sexo, 
+                                intval($dataRow->legajo), 
+                                floatval($dataRow->sueldo),
+                                $dataRow->turno);
+                                $emp->SetPathFoto($dataRow->pathFoto);
+                                $emp->SetId($dataRow->id);
+        }catch(Exception $e){
+            $emp = null;
+        }finally{
+            unset($pdo);
+            return $emp;
+        }
     }
     function DB_TraerTodos($table = 'empleados'){
         $pdo = new PDO(ConectionString());
@@ -84,10 +89,10 @@
         return $array_objects;
     }
     /**Verifica si el dni de un empleado ya esta en la DB */
-    function VerificarExistencia($pdo, $dni, $table = "empleados"){
+    function VerificarExistencia($dni, $table = "empleados"){
         $pdo = new PDO(ConectionString());
         $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
-        $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
+        $sentencia->bindValue(':dni', $dni, PDO::PARAM_INT);
         $sentencia->execute();
         if($sentencia->fetchObject() != null){
             return false;

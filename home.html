@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='./TP/handler.js'></script>
+    <title>Document</title>
+</head>
+<body>
+    <script src="./TP/handler.js">VerificarSesion()</script>
+    <div id="divLogin" style="display: none;">
+        <form id="frmLogin">
+            <table align="center">
+                <tr>
+                    <td><h2>Login</h2></td>                                        
+                </tr>
+                <tr>
+                    <td>DNI</td>
+                    <td><input type="number" id="txtDniLogin"></td>
+                </tr>
+                <tr>
+                    <td>Apellido</td>
+                    <td><input type="text" id="txtApellidoLogin"></td>
+                </tr>
+                <tr>
+                    <td align="right"colspan="2">
+                        <button type="button"id="btnEnviar"onclick="Login()">Enviar</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="divEmpleado" style="display: block;">
+        <h2>Empleado</h2>
+        <form id="frmEmpleado" method="POST" enctype="multipart/form-data" onchange="">
+            <table align="center">
+                <tr>
+                    <td>DNI</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <input type="number" name="txtDni" id="txtDni" min="1000000" max="55000000" onchange="Empleado_Verificar_Dni()">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Apellido</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <input type="text" name="txtApellido" id="txtApellido" onchange="Empleado_Verificar_Nombre('txtApellido')">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <input type="text" name="txtNombre" id="txtNombre" onchange="Empleado_Verificar_Nombre('txtNombre')">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sexo:</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <select name="cboSexo" id="cboSexo" onchange="Empleado_Verificar_Cbo()">                                
+                            <option value="---">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>                                
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Legajo:</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <input type="number" name="txtLegajo" id="txtLegajo" min="100" max="500" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sueldo:</td>
+                    <td style="text-align:left;padding-left:15px;">
+                        <input type="number" name="txtSueldo" id="txtSueldo" min="8000" step="500">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Turno:</td>
+                </tr>
+                <tr>
+                    <td></td>				
+                    <td> 
+                        <input type="radio" name="rdoTurno" value="Mañana" checked/>
+                        Mañana						
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="radio" name="rdoTurno" value="Tarde"/>
+                        Tarde					
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="radio" name="rdoTurno" value="Noche"/>						
+                        Noche
+                    </td>
+                </tr>
+                <tr>
+                    <td>Foto:</td>
+                    <td>
+                        <input type="file"accept="image/png,.jpg,image/gif"id="imgEmp"name="foto">
+                    </td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td align="center">
+                        <input type="reset" value="Limpiar"/>
+                    </td>
+                    <td align="center">
+                        <input type="button" onclick="" id="btnEnviar" value="Enviar"/>                            
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="divListar" style="display: none;">
+        <table id="tableListar" align="center">            
+        </table>
+    </div>
+</body>
+</html>
