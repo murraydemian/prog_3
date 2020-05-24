@@ -40,7 +40,23 @@ function Login() : void{
     })
 }
 function Empleado_Agregar(){
-
+    if(Empleado_Verificar('')){
+        let emp : any = Empleado_Crear_Json();
+        let frmDta : FormData = PrepararFormData(emp, 'append');
+        $.ajax({
+            dataType: 'json',
+            url: 'TP/src/api.php',
+            type: "POST",
+            contentType: false,
+            processData: false,
+            async: true,
+            data: frmDta
+        }).done(function (response){
+            console.log(JSON.stringify(response));
+        }).fail(function (){
+            console.log(this.status);
+        })
+    }
 }
 function Listar_TableRow(o : object) : HTMLTableRowElement{
     let tr = document.createElement('tr');
@@ -71,29 +87,113 @@ function HideAll(){
     $("#divEmpleado").attr("style", "display: none");
     $("#divListar").attr("style", "display: none");
 }
-function Empleado_Verificar(){
-    Empleado_Verificar_Dni();
-    Empleado_Verificar_Nombre('txtNombre');
-    Empleado_Verificar_Nombre('txtApellido');
+function Empleado_Verificar(field : string) : boolean{
+    let ok = false;
+    //console.log(field);
+    switch(field){
+        case 'dni':
+            ok = Empleado_Verificar_Dni('txtDni', 55000000, 10000000, 'tgDni');
+            break;
+        case 'nombre':
+            ok = Empleado_Verificar_Nombre('txtNombre', 'tgNombre');
+            break;
+        case 'apellido':
+            ok = Empleado_Verificar_Nombre('txtApellido', 'tgApellido');
+            break;
+        case 'sexo':
+            ok = Empleado_Verificar_Cbo('cboSexo', 'tgSexo');
+            break;
+        case 'legajo':
+            ok = Empleado_Verificar_Dni('txtLegajo', 500, 100, 'tgLegajo');
+            break;
+        case 'sueldo':
+            ok = Empleado_Verificar_Dni('txtSueldo',
+                Empleado_SueldoMaximo(Empleado_TurnoSeleccionado()), 8000, 'tgSueldo');
+            break;
+        case 'foto':
+            ok = Empleado_Verificar_Foto('imgEmp', 'tgFoto');
+            break;
+        default:
+            ok = Empleado_Verificar_Dni('txtDni', 55000000, 10000000, 'tgDni') &&
+            Empleado_Verificar_Nombre('txtNombre', 'tgNombre') &&
+            Empleado_Verificar_Nombre('txtApellido', 'tgApellido') &&
+            Empleado_Verificar_Cbo('cboSexo', 'tgSexo') &&
+            Empleado_Verificar_Dni('txtLegajo', 500, 100, 'tgLegajo') &&
+            Empleado_Verificar_Dni('txtSueldo',
+                Empleado_SueldoMaximo(Empleado_TurnoSeleccionado()), 8000, 'tgSueldo') &&
+            Empleado_Verificar_Foto('imgEmp', 'tgFoto');
+    }
+    return ok;    
 }
-function Empleado_Verificar_Nombre(id : string) : void{
+function Empleado_Verificar_Nombre(id : string, tg : string) : boolean{
     let value : string = $('#' + id).val().toString();
-    value.length > 0 && !(value.match(/[^A-Za-z]+$/)) ?
-        $('#' + id).attr('style', '') :
-        $('#' + id).attr('style', 'border-color:red');
+    let ok : boolean = value.length > 0 && !(value.match(/[^A-Za-z]+$/));
+    BorderTg(id, tg, ok);
+    return ok;
 }
-function Empleado_Verificar_Dni(){
-    let value;
-    let foo;
-    isNaN(foo = parseInt($('#txtDni').val().toString())) ? value = null: value = foo;
-    if(value != null){
-        value >= 10000000 && value <= 55000000 ? 
-            $('#txtDni').attr('style', '') :
-            $('#txtDni').attr('style', 'border-color:red');
+function Empleado_Verificar_Dni(id : string, max : number, min : number, tg : string) : boolean{
+    let value : number = parseInt($('#' + id).val().toString());
+    let ok : boolean = value <= max && value >= min;
+    BorderTg(id, tg, ok);
+    return ok;
+}
+function Empleado_Verificar_Cbo(id : string, tg : string) : boolean{
+    let ok =$('#' + id).val().toString() != "---";
+    BorderTg(id, tg, ok);
+    return ok;
+}
+function Empleado_Verificar_Foto(id : string, tg : string){
+    let ok = $('#' + id).val().toString() != '';
+    BorderTg(id, tg, ok);
+    return ok;
+}
+function BorderTg(id : string, tg : string, ok : boolean){
+    if(ok){
+        $('#' + id).css({"border": ''});
+        $('#' + tg).attr('style', 'display:none');
+    }else{
+        $('#' + id).css({ "border": '#FF0000 2px inset'});
+        $('#' + tg).attr('style', 'display:block');
     }
 }
-function Empleado_Verificar_Cbo(){
-    $('#cboSexo').val().toString() != "---" ?
-        $('#cboSexo').attr('style', '') : 
-        $('#cboSexo').attr('style', 'border-color:red');
+function Empleado_SueldoMaximo(turno : string){
+    let max : number = 0;
+    if(turno == "Mañana"){
+        max = 20000;
+    }else if(turno == "Tarde"){
+        max = 18500;
+    }else if(turno == "Noche"){
+        max = 25000;
+    }
+    return max;
+}
+function Empleado_TurnoSeleccionado(){
+    let val : string = null;
+    let lista : NodeList = <NodeList> document.getElementsByName("rdoTurno");
+    lista.forEach(element => {
+        if((<HTMLInputElement>element).checked){
+            val = (<HTMLInputElement>element).value;                      
+        }
+    });
+    return val;
+}
+function Empleado_Crear_Json() : string{
+    let str = '{' +
+            '"dni":"' + $('#txtDni').val().toString() + '",' +
+            '"nombre":"' + $('#txtNombre').val().toString() + '",' +
+            '"apellido":"' + $('#txtApellido').val().toString() + '",' +
+            '"sexo":"' + $('#cboSexo').val().toString() + '",' +
+            '"legajo":"' + $('#txtLegajo').val().toString() + '",' +
+            '"sueldo":"' + $('#txtSueldo').val().toString() + '",' +
+            '"turno":"' + Empleado_TurnoSeleccionado() + '"' +
+            '}';
+    return str;
+}
+function PrepararFormData(objeto : any, action : string){
+    let frmDta : FormData = new FormData();
+    let foto : any= $('#imgEmp')[0];
+    frmDta.append('action', action);
+    frmDta.append('data', objeto);
+    frmDta.append('photo', foto.files[0]);
+    return frmDta;
 }

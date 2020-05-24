@@ -15,14 +15,14 @@
         }catch(Exception $e){
             echo($e->getMessage());
         }finally{
-            echo("<BR><a href=../index.php>Volver a pantalla de carga</a>");
+            //echo("<BR><a href=../index.php>Volver a pantalla de carga</a>");
         }
     }
     function VerificarImagen(){
         $ret = false;
         if(isset($_FILES["foto"])){            
             if(!file_exists('./fotos/'.$_FILES["foto"]["name"])&&
-                ((int)$_FILES["foto"]["size"]) <= 1048576){                
+                ((int)$_FILES["foto"]["size"]) <= 10048576){                
                 $ret = true;
             }else{
                 throw new Exception("El archivo ". $_FILES["foto"]["name"] ." ya esxiste o es muy grande.");
@@ -57,9 +57,9 @@
         if($emp->GetPathFoto() != null && $fab->AgregarEmpleado($emp)){
             $fab->GuardarEnArchivo("../archivos/empleados.txt");
             move_uploaded_file($_FILES["foto"]["tmp_name"], '../' . $emp->GetPathFoto());
-            echo('Se guardo el empleado.<BR><A href="./mostrar.php">Mostrar empleados</A>');
+            //echo('Se guardo el empleado.<BR><A href="./mostrar.php">Mostrar empleados</A>');
         }else{
-            echo('No se pudo guardar el empleado.<BR><A href="./mostrar.php">Mostrar empleados</A>');
+            //echo('No se pudo guardar el empleado.<BR><A href="./mostrar.php">Mostrar empleados</A>');
         }
     }
     function ModificarEmpleado(){
@@ -80,5 +80,4 @@
         $fab->GuardarEnArchivo('../archivos/empleados.txt');    
     }
             
-    Administrar();
 ?>

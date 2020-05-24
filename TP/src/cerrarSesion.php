@@ -5,5 +5,5 @@ include_once "./validarSesion.php";
         session_destroy();
         validarSesion();
     }
-    CerrarSesion();
+    //CerrarSesion();
 ?>

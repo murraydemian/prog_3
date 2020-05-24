@@ -9,13 +9,13 @@
             if($fab->EliminarEmpleadoPorLegajo($_GET['legajo']) && 
                     unlink("../" . $emp->GetPathFoto())){
                 $fab->GuardarEnArchivo("../archivos/empleados.txt");            
-                echo("Se elimino el empleado.<br>");            
+                //echo("Se elimino el empleado.<br>");            
             }else{
-                echo("No se pudo eliminar al empleado.<br>");
+                //echo("No se pudo eliminar al empleado.<br>");
             }
         }
-        echo('<BR><A href="./mostrar.php">Mostrar empleados</A>');
-        echo('<BR><a href="../index.php">Volver a pantalla de carga</a>');
+        //echo('<BR><A href="./mostrar.php">Mostrar empleados</A>');
+        //echo('<BR><a href="../index.php">Volver a pantalla de carga</a>');
     }
-    Borrar();
+    //Borrar();
 ?>

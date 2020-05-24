@@ -1,16 +1,28 @@
 <?PHP
     include_once "./exception/exceptions.php";
+    include_once './clases/persona.php';
+    include_once './clases/empleado.php';
 
+
+    //DB_Traer(39514859, 'empleados');
     /**Retorna la cadena de coneccion a la base de datos */
     function ConectionString(){
         return 'mysql:host=localhost;dbname=tp_prog';
     }
     /**Verifica si el empleado ya esta ingresado, si los datos no estan duplicados, lo agrega a la DB */
     function DB_Agregar($emp, $tabla = "empleados", $verificar = true){
-        if(VerificarExistencia($emp->GetDni(), 'empleados') && $verificar){
+        /*
+        ///
+                var_dump($emp);
+                $res = ob_get_clean();
+                $f = fopen('./dump.html', 'w');
+                fwrite($f, $res);
+                fclose($f);
+        ///
+        if(VerificarExistencia($emp->dni, 'empleados') && $verificar){
             throw new EmpleadoRepetidoException();
         }else{
-            $pdo = new PDO(ConectionString());        
+            $pdo = new PDO(ConectionString(),'root');        
             if($verificar){ //el booleano verificar indica si se verificara por datos repetidos
                 $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
                 (dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
@@ -22,15 +34,20 @@
                 VALUES (id=:id,dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
                 sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
                 $sentencia->bindValue(':id', $emp->GetId(), PDO::PARAM_INT);
-            }
-            $sentencia->bindValue(':dni', $emp->GetDni(), PDO::PARAM_INT);
-            $sentencia->bindValue(':nombre', $emp->GetNombre(), PDO::PARAM_STR);
-            $sentencia->bindValue(':apellido', $emp->GetApellido(), PDO::PARAM_STR);
-            $sentencia->bindValue(':sexo', $emp->GetSexo(), PDO::PARAM_STR);
-            $sentencia->bindValue(':legajo', $emp->GetLegajo(), PDO::PARAM_INT);
-            $sentencia->bindValue(':sueldo', strval($emp->GetSueldo()), PDO::PARAM_STR);
-            $sentencia->bindValue(':turno', $emp->GetTurno(), PDO::PARAM_STR);
-            $sentencia->bindValue(':pathFoto', $emp->GetPathFoto(), PDO::PARAM_STR);
+            }*/
+            $pdo = new PDO(ConectionString());
+            $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
+                (dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
+                VALUES (dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
+                sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
+            $sentencia->bindValue(':dni', $emp->dni, PDO::PARAM_INT);
+            $sentencia->bindValue(':nombre', $emp->nombre, PDO::PARAM_STR);
+            $sentencia->bindValue(':apellido', $emp->apellido, PDO::PARAM_STR);
+            $sentencia->bindValue(':sexo', $emp->sexo, PDO::PARAM_STR);
+            $sentencia->bindValue(':legajo', $emp->legajo, PDO::PARAM_INT);
+            $sentencia->bindValue(':sueldo', $emp->sueldo, PDO::PARAM_STR);
+            $sentencia->bindValue(':turno', $emp->turno, PDO::PARAM_STR);
+            $sentencia->bindValue(':pathFoto', $emp->pathFoto, PDO::PARAM_STR);
             $sentencia->execute();
             unset($pdo);
         }
@@ -53,17 +70,21 @@
             $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
             $sentencia->execute();            
             $dataRow = $sentencia->fetchObject();
+            var_dump($dataRow);
             $emp = new Empleado($dataRow->nombre, 
                                 $dataRow->apellido, 
-                                intval($dataRow->dni), 
+                                $dataRow->dni, 
                                 $dataRow->sexo, 
-                                intval($dataRow->legajo), 
-                                floatval($dataRow->sueldo),
+                                $dataRow->legajo, 
+                                $dataRow->sueldo,
                                 $dataRow->turno);
                                 $emp->SetPathFoto($dataRow->pathFoto);
                                 $emp->SetId($dataRow->id);
+            var_dump($emp);
         }catch(Exception $e){
-            $emp = null;
+            $f = fopen('./dump.txt', 'a');
+            fwrite($f, $e->message . "\n");
+            fclose($f);
         }finally{
             unset($pdo);
             return $emp;
@@ -94,10 +115,11 @@
         $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
         $sentencia->bindValue(':dni', $dni, PDO::PARAM_INT);
         $sentencia->execute();
+        unset($pdo);
         if($sentencia->fetchObject() != null){
-            return false;
-        }else{
             return true;
+        }else{
+            return false;
         }
     }
 ?>

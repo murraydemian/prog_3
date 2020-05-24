@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <td align="right"colspan="2">
-                        <button type="button"id="btnEnviar"onclick="Login()">Enviar</button>
+                        <button type="button"id="btnEnviarLogin"onclick="Login()">Enviar</button>
                     </td>
                 </tr>
             </table>
@@ -38,41 +38,59 @@
                 <tr>
                     <td>DNI</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <input type="number" name="txtDni" id="txtDni" min="1000000" max="55000000" onchange="Empleado_Verificar_Dni()">
+                        <input type="number" name="txtDni" id="txtDni" min="1000000" max="55000000" onchange="Empleado_Verificar('dni')">
+                    </td>
+                    <td>
+                        <span id="tgDni"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td>Apellido</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <input type="text" name="txtApellido" id="txtApellido" onchange="Empleado_Verificar_Nombre('txtApellido')">
+                        <input type="text" name="txtApellido" id="txtApellido" onchange="Empleado_Verificar('apellido')">
+                    </td>
+                    <td>
+                        <span id="tgApellido"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td>Nombre:</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <input type="text" name="txtNombre" id="txtNombre" onchange="Empleado_Verificar_Nombre('txtNombre')">
+                        <input type="text" name="txtNombre" id="txtNombre" onchange="Empleado_Verificar('nombre')">
+                    </td>
+                    <td>
+                        <span id="tgNombre"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td>Sexo:</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <select name="cboSexo" id="cboSexo" onchange="Empleado_Verificar_Cbo()">                                
+                        <select name="cboSexo" id="cboSexo" onchange="Empleado_Verificar('sexo')">                                
                             <option value="---">Seleccione</option>
                             <option value="M">Masculino</option>
                             <option value="F">Femenino</option>                                
                         </select>
                     </td>
+                    <td>
+                        <span id="tgSexo"style="display:block;" name="tgForm">*</span>
+                    </td>
                 </tr>
                 <tr>
                     <td>Legajo:</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <input type="number" name="txtLegajo" id="txtLegajo" min="100" max="500" required>
+                        <input type="number" name="txtLegajo" id="txtLegajo" min="100" max="500" required onchange="Empleado_Verificar('legajo')">
+                    </td>
+                    <td>
+                        <span id="tgLegajo"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td>Sueldo:</td>
                     <td style="text-align:left;padding-left:15px;">
-                        <input type="number" name="txtSueldo" id="txtSueldo" min="8000" step="500">
+                        <input type="number" name="txtSueldo" id="txtSueldo" min="8000" step="500" onchange="Empleado_Verificar('sueldo')">
+                    </td>
+                    <td>
+                        <span id="tgSueldo"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr>
@@ -102,7 +120,10 @@
                 <tr>
                     <td>Foto:</td>
                     <td>
-                        <input type="file"accept="image/png,.jpg,image/gif"id="imgEmp"name="foto">
+                        <input type="file"accept="image/png,.jpg,image/gif"id="imgEmp"name="foto" onchange="Empleado_Verificar('foto')">
+                    </td>
+                    <td>
+                        <span id="tgFoto"style="display:block;" name="tgForm">*</span>
                     </td>
                 </tr>
                 <tr><td><br></td></tr>
@@ -111,7 +132,7 @@
                         <input type="reset" value="Limpiar"/>
                     </td>
                     <td align="center">
-                        <input type="button" onclick="" id="btnEnviar" value="Enviar"/>                            
+                        <input type="button" onclick="Empleado_Agregar()" id="btnEnviar" value="Enviar"/>                            
                     </td>
                 </tr>
             </table>

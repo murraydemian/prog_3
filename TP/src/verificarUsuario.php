@@ -1,5 +1,5 @@
 <?php 
-    require_once '../paths.php';
+    //require_once '../paths.php';
     /**
      * Recibe por POST el Apellido y DNI de un empleado y checkea el archivo
      * ../archivos/empledaos.txt para verificar si los datos son los de un 
@@ -21,8 +21,16 @@
                     exit();
                 }                
             }
-            echo('<h4>No existe empleados con datos indicados.</h4><br><a href="./login.html">Volver al login</a>');            
+            //echo('<h4>No existe empleados con datos indicados.</h4><br><a href="./login.html">Volver al login</a>');            
         }
     }
-    VerificarUsuario();
+    function VerificarEmpleadoJSON(){
+        //en un futuro contendra las verificaciones pertinentes pero, por ahora,
+        //solo conviente el Json en un objeto empleado
+        $json = json_decode($_POST['data']);
+        $emp = new Empleado($json->nombre, $json->apellido, $json->dni,
+                            $json->sexo, $json->legajo, $json->turno);
+        
+        return $emp;
+    }
 ?>

@@ -16,8 +16,9 @@
         }
     }
     function IniciarSesion(){
-        $e = DB_Traer($_POST['data']['dni']);
-        if($e != null){
+        $data = json_decode($_POST['data']);
+        $e = DB_Traer($data->dni);        
+        if($e != null && $e->GetApellido() == $data->apellido){
             return $e->GetDni();
         }else{
             return "0";
