@@ -9,26 +9,8 @@
     function ConectionString(){
         return 'mysql:host=localhost;dbname=tp_prog';
     }
-    /**Verifica si el empleado ya esta ingresado, si los datos no estan duplicados, lo agrega a la DB */
+    /**Agrega un empleado a la DB */
     function DB_Agregar($emp, $tabla = "empleados", $verificar = true){
-        /*
-        if(VerificarExistencia($emp->dni, 'empleados') && $verificar){
-            throw new EmpleadoRepetidoException();
-        }else{
-            $pdo = new PDO(ConectionString(),'root');        
-            if($verificar){ //el booleano verificar indica si se verificara por datos repetidos
-                $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
-                (dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
-                VALUES (dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
-                sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
-            }else{ //se supone que se use solo en la tabla de borrados esta sentencia
-                $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
-                (id,dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
-                VALUES (id=:id,dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
-                sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
-                $sentencia->bindValue(':id', $emp->GetId(), PDO::PARAM_INT);
-            }
-        }*/
         $pdo = new PDO(ConectionString(),'root');
         $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . 
             '(dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) ' .
@@ -43,25 +25,15 @@
         $sentencia->bindValue(':turno', $emp->turno, PDO::PARAM_STR);
         $sentencia->bindValue(':pathFoto', $emp->pathFoto, PDO::PARAM_STR);
         $t = $sentencia->execute();
-        ///
+        /*///
             var_dump($emp);
             $res = ob_get_clean();
             $f = fopen('./dump.html', 'w');
             fwrite($f, $res);
             fclose($f);
-        ///        
+        ///*/   
         unset($pdo);
         return $t;        
-    }
-    /**Remueve un empleado de la tabla principal y lo carga en la tabla de borrados */
-    function DB_Eliminar($emp){
-        $out = DB_Traer($emp->GetDni());
-        DB_Agregar($out, 'borrados', false);
-        $pdo = new PDO(ConectionString());
-        $sentencia = $pdo->prepare('DELETE FROM empleados WHERE id=:id');
-        $sentencia->bindValue(':id', $emp->GetId(), PDO::PARAM_INT);
-        $sentencia->execute();
-        unset($pdo);
     }
     /**Trae un objeto empleado de una tabla donde coincida el DNI */
     function DB_Traer($dni, $table = 'empleados'){
@@ -112,6 +84,14 @@
                             $emp->SetId($dataRow->id);
             array_push($array_objects, $emp);
         }
+        /*///
+            var_dump($array_objects);
+            $res = ob_get_clean();
+            $f = fopen('./dump.html', 'w');
+            fwrite($f, $res);
+            fclose($f);
+        ///*/
+        unset($pdo);
         return $array_objects;
     }
     /**Verifica si el dni de un empleado ya esta en la DB */
@@ -126,5 +106,30 @@
         }else{
             return false;
         }
+    }
+    function DB_Modificar($emp, $table = "empleados"){
+        $pdo = new PDO(ConectionString());
+        $sentencia = $pdo->prepare('UPDATE '.$table.' 
+            SET nombre=:nombre,pathFoto=:pathFoto,apellido=:apellido,sexo=:sexo,legajo=:legajo,sueldo=:sueldo,turno=:turno 
+            WHERE dni=:dni');
+        $sentencia->bindValue(':nombre', $emp->nombre, PDO::PARAM_STR);
+        $sentencia->bindValue(':pathFoto', $emp->pathFoto, PDO::PARAM_STR);
+        $sentencia->bindValue(':apellido', $emp->apellido, PDO::PARAM_STR);
+        $sentencia->bindValue(':sexo', $emp->sexo, PDO::PARAM_STR);
+        $sentencia->bindValue(':legajo', intval($emp->legajo), PDO::PARAM_INT);
+        $sentencia->bindValue(':sueldo', $emp->sueldo, PDO::PARAM_STR);
+        $sentencia->bindValue(':turno', $emp->turno, PDO::PARAM_STR);
+        $sentencia->bindValue(':dni', intval($emp->dni), PDO::PARAM_INT);
+        $t = $sentencia->execute();
+        unset($pdo);
+        return $t;
+    }
+    function DB_Eliminar($id, $table = "empleados"){
+        $pdo = new PDO(ConectionString());
+        $sentencia = $pdo->prepare('DELETE FROM empleados WHERE id=:id');
+        $sentencia->bindValue(':id', $id, PDO::PARAM_INT);
+        $t = $sentencia->execute();
+        unset($pdo);
+        return $t;
     }
 ?>

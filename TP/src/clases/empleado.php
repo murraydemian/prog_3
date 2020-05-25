@@ -52,5 +52,16 @@
         public function ToString(){
             return parent::ToString() . "-" . $this->_legajo . "-" . $this->_sueldo . "-" . $this->_turno . "-" . $this->_path;
         }
+        public function ToJSON(){
+            $dni = $this->GetDni();
+            $nombre = $this->GetNombre();
+            $apellido = $this->GetApellido();
+            $sexo = $this->GetSexo();
+            $legajo = $this->GetLegajo();
+            $sueldo = $this->GetSueldo();
+            $turno = $this->GetTurno();
+            $path = $this->GetPathFoto();
+            return '{"dni":"'.$dni.'","nombre":"'.$nombre.'","apellido":"'.$apellido.'","sexo":"'.$sexo.'","legajo":"'.$legajo.'","sueldo":"'.$sueldo.'","turno":"'.$turno.'","pathFoto":"'.$path.'"}';
+        }
     }
 ?>

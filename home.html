@@ -10,12 +10,21 @@
 <body onload="VerificarSesion()">
     <script src="./TP/handler.js"></script>
     <div id="divCerrar" style="display: none;">
-        <table align="right">
-            <tr><td>
-                <input type="button" value="Cerrar Sesion" onclick="CerrarSesion()" id="btnCerrar">
-            </td></tr>
+        <table align="left">
+            <tr>
+                <td align="left">
+                    <input type="button" value="Cargar Datos" onclick="Empleado_DivEmpleado()" id="btnCargar">
+                </td>
+                <td align="left">
+                    <input type="button" value="Listar Empleados" onclick="Empleado_MostrarTodos()" id="btnMostrar">
+                </td>
+                <td>
+                    <input type="button" value="Cerrar Sesion" onclick="CerrarSesion()" id="btnCerrar">
+                </td>
+            </tr>
         </table>
     </div>
+    <br><br>
     <div id="divLogin" style="display: none;" onload="VerificarSesion()">
         <form id="frmLogin">
             <table align="center">
@@ -38,12 +47,12 @@
             </table>
         </form>
     </div>
-    <div id="divEmpleado" style="display: block;">
+    <div id="divEmpleado" style="display: block;" onload="VerificarSesion();Empleado_DivEmpleado()">
         <form id="frmEmpleado" method="POST" enctype="multipart/form-data" onchange="">
             <table align="center">
                 <tr>
                     <td style="text-align:left;" colspan="3">
-                        <h2 id="tituloCarga">Empleado</h2>
+                        <h2 id="tituloCarga">Cargar Empleado</h2>
                     </td>
                 </tr>
                 <tr>
@@ -78,8 +87,8 @@
                     <td style="text-align:left;padding-left:15px;">
                         <select name="cboSexo" id="cboSexo" onchange="Empleado_Verificar('sexo')">                                
                             <option value="---">Seleccione</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>                                
+                            <option value="M" id="optM">Masculino</option>
+                            <option value="F" id="optF">Femenino</option>                                
                         </select>
                     </td>
                     <td>
@@ -110,21 +119,21 @@
                 <tr>
                     <td></td>				
                     <td> 
-                        <input type="radio" name="rdoTurno" value="Mañana" checked/>
+                        <input type="radio" name="rdoTurno" value="Mañana" id="rdoMañana" checked/>
                         Mañana						
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <input type="radio" name="rdoTurno" value="Tarde"/>
+                        <input type="radio" name="rdoTurno" value="Tarde" id="rdoTarde"/>
                         Tarde					
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <input type="radio" name="rdoTurno" value="Noche"/>						
+                        <input type="radio" name="rdoTurno" value="Noche" id="rdoNoche"/>						
                         Noche
                     </td>
                 </tr>
@@ -140,7 +149,7 @@
                 <tr><td><br></td></tr>
                 <tr>
                     <td align="center">
-                        <input type="reset" value="Limpiar"/>
+                        <input type="reset" value="Limpiar" id="btnLimpiar"/>
                     </td>
                     <td align="center">
                         <input type="button" onclick="Empleado_Agregar()" id="btnEnviar" value="Enviar"/>                            
@@ -149,8 +158,7 @@
             </table>
         </form>
     </div>
-    <div id="divListar" style="display: none;">
-        <table id="tableListar" align="center">            
+    <div id="divListar" style="display: none;">         
         </table>
     </div>
 </body>
