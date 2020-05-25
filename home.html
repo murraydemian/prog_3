@@ -7,9 +7,16 @@
     <script src='./TP/handler.js'></script>
     <title>Document</title>
 </head>
-<body>
-    <script src="./TP/handler.js">VerificarSesion()</script>
-    <div id="divLogin" style="display: none;">
+<body onload="VerificarSesion()">
+    <script src="./TP/handler.js"></script>
+    <div id="divCerrar" style="display: none;">
+        <table align="right">
+            <tr><td>
+                <input type="button" value="Cerrar Sesion" onclick="CerrarSesion()" id="btnCerrar">
+            </td></tr>
+        </table>
+    </div>
+    <div id="divLogin" style="display: none;" onload="VerificarSesion()">
         <form id="frmLogin">
             <table align="center">
                 <tr>
@@ -32,9 +39,13 @@
         </form>
     </div>
     <div id="divEmpleado" style="display: block;">
-        <h2>Empleado</h2>
         <form id="frmEmpleado" method="POST" enctype="multipart/form-data" onchange="">
             <table align="center">
+                <tr>
+                    <td style="text-align:left;" colspan="3">
+                        <h2 id="tituloCarga">Empleado</h2>
+                    </td>
+                </tr>
                 <tr>
                     <td>DNI</td>
                     <td style="text-align:left;padding-left:15px;">

@@ -12,13 +12,6 @@
     /**Verifica si el empleado ya esta ingresado, si los datos no estan duplicados, lo agrega a la DB */
     function DB_Agregar($emp, $tabla = "empleados", $verificar = true){
         /*
-        ///
-                var_dump($emp);
-                $res = ob_get_clean();
-                $f = fopen('./dump.html', 'w');
-                fwrite($f, $res);
-                fclose($f);
-        ///
         if(VerificarExistencia($emp->dni, 'empleados') && $verificar){
             throw new EmpleadoRepetidoException();
         }else{
@@ -34,23 +27,31 @@
                 VALUES (id=:id,dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
                 sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
                 $sentencia->bindValue(':id', $emp->GetId(), PDO::PARAM_INT);
-            }*/
-            $pdo = new PDO(ConectionString());
-            $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . ' 
-                (dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) 
-                VALUES (dni=:dni,nombre=:nombre,apellido=:apellido,sexo=:sexo,legajo=:legajo,
-                sueldo=:sueldo,turno=:turno,pathFoto=:pathFoto');
-            $sentencia->bindValue(':dni', $emp->dni, PDO::PARAM_INT);
-            $sentencia->bindValue(':nombre', $emp->nombre, PDO::PARAM_STR);
-            $sentencia->bindValue(':apellido', $emp->apellido, PDO::PARAM_STR);
-            $sentencia->bindValue(':sexo', $emp->sexo, PDO::PARAM_STR);
-            $sentencia->bindValue(':legajo', $emp->legajo, PDO::PARAM_INT);
-            $sentencia->bindValue(':sueldo', $emp->sueldo, PDO::PARAM_STR);
-            $sentencia->bindValue(':turno', $emp->turno, PDO::PARAM_STR);
-            $sentencia->bindValue(':pathFoto', $emp->pathFoto, PDO::PARAM_STR);
-            $sentencia->execute();
-            unset($pdo);
-        }
+            }
+        }*/
+        $pdo = new PDO(ConectionString(),'root');
+        $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . 
+            '(dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) ' .
+            'VALUES (:dni,:nombre,:apellido,:sexo,:legajo,' .
+            ':sueldo,:turno,:pathFoto)');
+        $sentencia->bindValue(':dni', intval($emp->dni), PDO::PARAM_INT);
+        $sentencia->bindValue(':nombre', $emp->nombre, PDO::PARAM_STR);
+        $sentencia->bindValue(':apellido', $emp->apellido, PDO::PARAM_STR);
+        $sentencia->bindValue(':sexo', $emp->sexo, PDO::PARAM_STR);
+        $sentencia->bindValue(':legajo', intval($emp->legajo), PDO::PARAM_INT);
+        $sentencia->bindValue(':sueldo', $emp->sueldo, PDO::PARAM_STR);
+        $sentencia->bindValue(':turno', $emp->turno, PDO::PARAM_STR);
+        $sentencia->bindValue(':pathFoto', $emp->pathFoto, PDO::PARAM_STR);
+        $t = $sentencia->execute();
+        ///
+            var_dump($emp);
+            $res = ob_get_clean();
+            $f = fopen('./dump.html', 'w');
+            fwrite($f, $res);
+            fclose($f);
+        ///        
+        unset($pdo);
+        return $t;        
     }
     /**Remueve un empleado de la tabla principal y lo carga en la tabla de borrados */
     function DB_Eliminar($emp){
@@ -70,20 +71,24 @@
             $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
             $sentencia->execute();            
             $dataRow = $sentencia->fetchObject();
-            var_dump($dataRow);
-            $emp = new Empleado($dataRow->nombre, 
-                                $dataRow->apellido, 
-                                $dataRow->dni, 
-                                $dataRow->sexo, 
-                                $dataRow->legajo, 
-                                $dataRow->sueldo,
-                                $dataRow->turno);
-                                $emp->SetPathFoto($dataRow->pathFoto);
-                                $emp->SetId($dataRow->id);
-            var_dump($emp);
+            //var_dump($dataRow);
+            if($dataRow){
+                $emp = new Empleado($dataRow->nombre, 
+                    $dataRow->apellido, 
+                    $dataRow->dni, 
+                    $dataRow->sexo, 
+                    $dataRow->legajo, 
+                    $dataRow->sueldo,
+                    $dataRow->turno);
+                $emp->SetPathFoto($dataRow->pathFoto);
+                $emp->SetId($dataRow->id);
+                //var_dump($emp);
+            }else{
+                $emp = null;
+            }
         }catch(Exception $e){
             $f = fopen('./dump.txt', 'a');
-            fwrite($f, $e->message . "\n");
+            fwrite($f, $e->GetMessage(). "\n");
             fclose($f);
         }finally{
             unset($pdo);

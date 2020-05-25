@@ -1,4 +1,9 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts"/>
+function CerrarSesion() {
+    document.cookie = 'usrkey="0"; Max-Age=2600000; Secure;';
+    HideAll();
+    $("#divLogin").attr("style", "display: block");
+}
 function VerificarSesion() {
     var data = { 'action': "check" };
     $.ajax({
@@ -14,6 +19,9 @@ function VerificarSesion() {
             alert("Sesion no iniciada.");
             $("#divLogin").attr("style", "display: block");
         }
+        else {
+            $("#divCerrar").attr("style", "display: block");
+        }
     }).fail(function () {
         console.log(this.response);
     });
@@ -27,19 +35,25 @@ function Login() {
         async: true,
         data: data
     }).done(function (response) {
-        if (response != "0") {
-            document.cookie = 'usrkey=' + response + "; Max-Age=2600000; Secure";
+        var r = JSON.parse(response);
+        console.log(response);
+        if (r.key != "0") {
+            //console.log(r);
+            r.key != '0' ? document.cookie = 'usrkey="' + r.key + "; Max-Age=2600000; Secure;" :
+                document.cookie = 'usrkey="0"; Max-Age=2600000; Secure;';
             HideAll();
+            $('#divCerrar').attr("style", "display: block");
             $("#divEmpleado").attr("style", "display: block");
         }
         else {
-            alert("Datos invalidos");
+            alert('Datos invalidos');
         }
     }).fail(function () {
         console.log(this.status);
     });
 }
 function Empleado_Agregar() {
+    VerificarSesion();
     if (Empleado_Verificar('')) {
         var emp = Empleado_Crear_Json();
         var frmDta = PrepararFormData(emp, 'append');
@@ -83,6 +97,7 @@ function GetCookie(cname) {
     return null;
 }
 function HideAll() {
+    $("#divCerrar").attr("style", "display: none");
     $("#divLogin").attr("style", "display: none");
     $("#divEmpleado").attr("style", "display: none");
     $("#divListar").attr("style", "display: none");

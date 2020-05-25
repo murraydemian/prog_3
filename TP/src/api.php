@@ -6,14 +6,8 @@
     require "./verificarUsuario.php";
     require_once './administracion.php';
     
-    //$pet = json_decode($_POST['data']);
-    //echo($pet['action']);
-
-    //echo(json_encode($_POST['data']));
     if(isset($_POST['action'])){
-        //$pet = json_encode()
-        $action = $_POST['action'];
-        switch($action){
+        switch($_POST['action']){
             case 'check':
                 if(ValidarSesionCookie()){
                     echo "1";
@@ -22,37 +16,36 @@
                 }
             break;
             case 'login':
-                return IniciarSesion();
+                $key = IniciarSesion();
+                echo('{"key":"' . $key . '"}');
             break;
-            case('append'):
-                //echo('{"hola":"'. $_POST['action'] .'"}');
+            case 'append':
                 try{
                     $emp = json_decode($_POST['data']);
                     $emp->pathFoto = $emp->dni . '_' . $emp->apellido . '.png';
-                    move_uploaded_file($_FILES["photo"]["tmp_name"], '../fotos/' . $_FILES['photo']['name']);
-                    rename('../fotos/' . $_FILES['photo']['name'], '../fotos/' . $emp->pathFoto);
-                    DB_Agregar($emp, 'empleados', true); 
-                    echo('{"todoOk":"1"}');
+                    if($foo = DB_Traer($emp->dni) == null){
+                        ///Guardo la fotito
+                        move_uploaded_file($_FILES["photo"]["tmp_name"], '../fotos/' . $_FILES['photo']['name']);
+                        rename('../fotos/' . $_FILES['photo']['name'], '../fotos/' . $emp->pathFoto);
+                        ///
+                        DB_Agregar($emp, 'empleados', true) ? 
+                            $r = '{"todoOk":"1"}' :
+                            $r = '{"todoOk":"0","error":"Error en carga"}' ;
+                    }else{
+                        $r = '{"todoOk":"0","error":"Empleado repetido"}';                        
+                    }
+                    echo $r;
                 }catch(Exception $e){
-                    echo('{"error":"'. $e->GetMessage() .'"}');
+                    echo('{"error":"error"}');
                 }
-            break;
+                break;
             default:
-                $action = $_POST['action'];
-                $emp = json_decode($_POST['data']);
-                $emp->pathFoto = $emp->dni . '_' . $emp->apellido . '.png';
-                var_dump($emp);
-                $res = ob_get_clean();
-                $f = fopen('./dump.html', 'w');
-                fwrite($f, $res);
-                fclose($f);
-                move_uploaded_file($_FILES["photo"]["tmp_name"], '../fotos/' . $_FILES['photo']['name']);
-                rename('../fotos/' . $_FILES['photo']['name'], '../fotos/' . $emp->pathFoto);
-                //$j = json_decode($_POST['data']);
-                //echo(json_encode($j));
-                //echo('{"action":"'. $action .'"}');
-                echo('{"action":"'. $emp->pathFoto .'"}');
+                echo('{"error":"accion invalida"}');
+                echo('{"action":"' . $_POST['action']. '"}');
             break;
+            
         }
+    }else{
+        echo('{"error":"peticion invalida"}');
     }
 ?>
