@@ -14,13 +14,14 @@ function VerificarSesion(){
         async: true,
         data: data
     }).done(function (response){
-        console.log(response);
-        if(response == '0'){
+        let r : any = JSON.parse(response)
+        console.log(r);
+        if(r.logged == '0'){
             HideAll();
-            alert("Sesion no iniciada.");
+            //alert("Sesion no iniciada.");
             $("#divLogin").attr("style", "display: block");
         }else{
-            $("#divCerrar").attr("style", "display: block");
+            Empleado_DivEmpleado();
         }
     }).fail(function(){
         console.log(this.response);

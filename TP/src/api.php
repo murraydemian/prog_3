@@ -7,7 +7,7 @@
     require_once './administracion.php';
     
     if(isset($_POST['action'])){
-        if($_POST['action'] != 'login'){
+        if($_POST['action'] != 'login' && $_POST['action'] != 'check'){
             if(!ValidarSesionCookie()){
                 $_POST['action'] = 'notlogged';
             }
@@ -15,9 +15,9 @@
         switch($_POST['action']){
             case 'check':
                 if(ValidarSesionCookie()){
-                    echo "1";
+                    echo '{"logged":"1"}';
                 }else{
-                    echo "0";
+                    echo '{"logged":"1"}';
                 }
             break;
             case 'login':
@@ -123,7 +123,7 @@
                 }
             break;
             case 'notlogged':
-                echo('{"error":"sesion no iniciada"}');
+                echo('{"logged":"0"}');
             break;
             default:
                 echo('{"error":"accion invalida"}');
