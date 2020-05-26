@@ -206,6 +206,11 @@ function Empleado_Agregar(){
             data: frmDta
         }).done(function (response){
             console.log(JSON.stringify(response));
+            if(response.todoOk == "1"){
+                Empleado_DivEmpleado();
+            }else{
+                alert(response.error);
+            }
         }).fail(function (){
             console.log(this.status);
         })

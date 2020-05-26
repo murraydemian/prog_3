@@ -6,12 +6,15 @@
 
     //DB_Traer(39514859, 'empleados');
     /**Retorna la cadena de coneccion a la base de datos */
-    function ConectionString(){
-        return 'mysql:host=localhost;dbname=tp_prog';
+    function Conection(){
+        $str = 'mysql:host=us-cdbr-east-06.cleardb.net;dbname=heroku_2954a8369d74e12';
+        $usr = 'ba240b2269e03a';
+        $psw = '426cc9b3';
+        return new PDO($str, $usr, $psw);
     }
     /**Agrega un empleado a la DB */
     function DB_Agregar($emp, $tabla = "empleados", $verificar = true){
-        $pdo = new PDO(ConectionString(),'root');
+        $pdo = Conection();
         $sentencia = $pdo->prepare('INSERT INTO ' . $tabla . 
             '(dni,nombre,apellido,sexo,legajo,sueldo,turno,pathFoto) ' .
             'VALUES (:dni,:nombre,:apellido,:sexo,:legajo,' .
@@ -38,7 +41,7 @@
     /**Trae un objeto empleado de una tabla donde coincida el DNI */
     function DB_Traer($dni, $table = 'empleados'){
         try{
-            $pdo = new PDO(ConectionString());
+            $pdo = Conection();
             $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
             $sentencia->bindValue(':dni', $dni, PDO::PARAM_STR);
             $sentencia->execute();            
@@ -68,7 +71,7 @@
         }
     }
     function DB_TraerTodos($table = 'empleados'){
-        $pdo = new PDO(ConectionString());
+        $pdo = Conection();
         $sentencia = $pdo->prepare('SELECT * FROM ' . $table);
         $sentencia->execute();
         $array_objects = array();
@@ -96,7 +99,7 @@
     }
     /**Verifica si el dni de un empleado ya esta en la DB */
     function VerificarExistencia($dni, $table = "empleados"){
-        $pdo = new PDO(ConectionString());
+        $pdo = Conection();
         $sentencia = $pdo->prepare('SELECT * FROM ' . $table .'  WHERE dni=:dni');
         $sentencia->bindValue(':dni', $dni, PDO::PARAM_INT);
         $sentencia->execute();
@@ -108,7 +111,7 @@
         }
     }
     function DB_Modificar($emp, $table = "empleados"){
-        $pdo = new PDO(ConectionString());
+        $pdo = Conection();
         $sentencia = $pdo->prepare('UPDATE '.$table.' 
             SET nombre=:nombre,pathFoto=:pathFoto,apellido=:apellido,sexo=:sexo,legajo=:legajo,sueldo=:sueldo,turno=:turno 
             WHERE dni=:dni');
@@ -125,7 +128,7 @@
         return $t;
     }
     function DB_Eliminar($id, $table = "empleados"){
-        $pdo = new PDO(ConectionString());
+        $pdo = Conection();
         $sentencia = $pdo->prepare('DELETE FROM empleados WHERE id=:id');
         $sentencia->bindValue(':id', $id, PDO::PARAM_INT);
         $t = $sentencia->execute();
