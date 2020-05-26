@@ -17,7 +17,7 @@
                 if(ValidarSesionCookie()){
                     echo '{"logged":"1"}';
                 }else{
-                    echo '{"logged":"1"}';
+                    echo '{"logged":"0"}';
                 }
             break;
             case 'login':
