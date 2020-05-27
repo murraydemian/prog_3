@@ -2,6 +2,7 @@
     include_once "./validarSesion.php";
 
     function MostrarLista(){
+        /*
         //verifico si hay una sesion iniciada   
         ValidarSesion();  
         //inicializo variables   
@@ -71,7 +72,8 @@
         '   <a href="../index.php">Volver a pantalla de carga</a>'. "\n" .
         '</body>'. "\n" .
         '</html>';
-        echo $webPage;
+        echo $webPage;*/
+        var_dump($_SERVER);
     }
 
 

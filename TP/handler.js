@@ -198,7 +198,7 @@ function Empleado_MostrarTodos() {
     });
 }
 function Empleado_Agregar() {
-    VerificarSesion();
+    //VerificarSesion();
     if (Empleado_Verificar('')) {
         var emp = Empleado_Crear_Json();
         var frmDta = PrepararFormData(emp, 'append');
@@ -222,6 +222,28 @@ function Empleado_Agregar() {
             console.log(this.status);
         });
     }
+}
+function Empleado_Informe() {
+    var emp = '{"0":"0"}';
+    var frmDta = PrepararFormData(emp, 'print');
+    //$('#btnPrint').attr('disabled','true');
+    $.ajax({
+        dataType: 'json',
+        url: 'TP/src/api.php',
+        type: "POST",
+        contentType: false,
+        processData: false,
+        async: true,
+        data: frmDta
+    }).done(function (response) {
+        console.log(JSON.stringify(response));
+        //$('#btnPrint').attr('disabled','false');        
+        window.open('https://tpprog.herokuapp.com/' + response.file);
+    }).fail(function () {
+        console.log('failed conection');
+        window.open('https://tpprog.herokuapp.com/TP/src/lista_empleados.pdf');
+        //$('#btnPrint').attr('disabled','false'); 
+    });
 }
 function GetCookie(cname) {
     var name = cname + "=";

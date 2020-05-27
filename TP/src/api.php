@@ -1,10 +1,12 @@
 <?php
+    require_once "../vendor/autoload.php";
     require "./clases/persona.php";
     require "./clases/empleado.php";
     require "./conexion.php";
     require "./validarSesion.php";
     require "./verificarUsuario.php";
     require_once './administracion.php';
+    require_once './pdfPrint.php';
     
     if(isset($_POST['action'])){
         if($_POST['action'] != 'login' && $_POST['action'] != 'check'){
@@ -121,6 +123,10 @@
                 }else{
                     echo('{"error":"Empleado no existe"}');
                 }
+            break;
+            case 'print':
+                pdfPrint();
+                echo('"todoOk":"1","file":"/TP/src/lista_empleados.pdf"}');
             break;
             case 'notlogged':
                 echo('{"logged":"0"}');
